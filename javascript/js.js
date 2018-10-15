@@ -19,6 +19,7 @@ class encounter {
   this.fightMessage = fightMessage || `The ${name} counter-attacks!`;
   this.friendMessage = friendMessage || `The ${name} is unconvinced. The ${name} attacks!`;
   this.fleeMessage = fleeMessage || `The ${name} takes the opportunity to attack!`;
+  this.arrIndex = encounterCount;
   encounterArray.push(this);
   encounterCount++;
   probArray.push(encounterChance);
@@ -47,16 +48,26 @@ class monster extends encounter{
 
 
 const player = new encounter("Bob", 10, 10, 10, 100, 0, 0, 0);
+const playerR = new encounter("Bob", 10, 10, 10, 100, 0, 0, 0);
 console.log(player);
 
-const Slime = new monster("Slime", 1, 20, 3, 30, 20, 3, 10, "");
+const Slime = new monster("Slime", 1, 1, 1, 30, 20, 3, 10, "");
+const SlimeR = new monster("", 0, 0, 0, 30, 20, 3, 0, "");
 console.log(Slime);
 
 const Rock = new monster("Rock", 0, 1000, 0, 200, 1000, 0, 1, "");
+const RockR = new monster("", 0, 0, 0, 200, 1000, 0, 0, "");
 console.log(Rock);
 
-const GiantRat = new monster("GiantRat", 3, 20, 3, 30, 5, 20, 5, "");
+const GiantRat = new monster("Giant Rat", 3, 3, 3, 30, 5, 20, 5, "");
+const GiantRatR = new monster("", 0, 0, 0, 30, 5, 20, 0, "");
 console.log(GiantRat);
+
+const TastyBanana = new monster("Tasty Banana", -100, 0, 0, 0.01, 100, 0, 2, "");
+const TastyBananaR = new monster("", 0, 0, 0, 1, 100, 0, 0, "");
+TastyBanana.fiWinMessage = "You destroy what most assuredly was a villainous opponent plotting evil in a fit of rage against it's insulting attempt of temptation.";
+TastyBanana.frWinMessage = "You successfully negotiate the banana into your stomach. It is tasty."
+console.log(TastyBanana);
 
 const accumulator = (a, b) => a + b;
 const totalProb = probArray.reduce(accumulator,0);
@@ -144,32 +155,50 @@ setEncounter();
 // action effects
 
 fight = () => {
-  playerFight = player.strength * Math.random();
+  playerFight = player.strength * ((Math.random())/2 +0.5);
   console.log(playerFight);
   currentEncounter.health -= playerFight;
   console.log(currentEncounter.health)
   instanceFiVictoryCheck(currentEncounter.health);
 
+
+
+  if (currentEncounter.name == "Tasty Banana") {
+    console.log(TastyBanana.fiWinMessage)
+    currentEncounter.health--;
+    setEncounter();
+  }
+  deathCheck(player.health);
 }
 // currentEncounter.fight;
 
 friend = () => {
-  playerFriend = player.charisma * Math.random();
+  playerFriend = player.charisma * ((Math.random())/2 +0.5);
   console.log(playerFriend);
   currentEncounter.resilience -= playerFriend;
   console.log(currentEncounter.resilience)
   instanceFrVictoryCheck(currentEncounter.resilience);
 
+
+
+  if (currentEncounter.name == "Tasty Banana") {
+    console.log(TastyBanana.frWinMessage)
+    currentEncounter.health--;
+    setEncounter();
+  }
+  deathCheck(player.health);
+
 }
 // currentEncounter.fight;
 
 flee = () => {
-  playerFlee = player.speed * Math.random();
+  playerFlee = player.speed * ((Math.random())/2 +0.5);
   console.log(playerFlee);
-  currentEncounter.speed -= playerFlee;
+  currentEncounter.endurance -= playerFlee;
   console.log(currentEncounter.endurance)
   instanceFlVictoryCheck(currentEncounter.endurance);
 
+  deathCheck(player.health);
 }
 // currentEncounter.fight;
 
@@ -217,11 +246,16 @@ const deathCheck = hp => {
 // deathCheck(player.health);
 
 const instanceFiVictoryCheck = hp => {
+
   if (hp <= 0) {
-    //create fight victory here, including + player skills
+    //create fight victory here
     console.log(`Congratulations! You killed the enemy ${currentEncounter.name}`)
-    player.strength += currentEncounter.strength;
+    if (currentEncounter.name != "Tasty Banana") {player.strength += currentEncounter.strength};
     kills++;
+    currentEncounter.health = encounterArray[currentEncounter.arrIndex+1].health;
+    currentEncounter.resilience = encounterArray[currentEncounter.arrIndex+1].resilience;
+    currentEncounter.endurance = encounterArray[currentEncounter.arrIndex+1].endurance;
+    setEncounter();
   }
   else {
     console.log(`The enemy ${currentEncounter.name} looks a bit shaken, but ready!`);
@@ -236,9 +270,13 @@ const instanceFrVictoryCheck = res => {
     console.log(`Congratulations! You have become buddies with the ${currentEncounter.name}!`)
     player.charisma += currentEncounter.charisma;
     friends++;
+    currentEncounter.health = encounterArray[currentEncounter.arrIndex+1].health;
+    currentEncounter.resilience = encounterArray[currentEncounter.arrIndex+1].resilience;
+    currentEncounter.endurance = encounterArray[currentEncounter.arrIndex+1].endurance;
+    setEncounter();
   }
   else {
-    console.log(`The enemy ${currentEncounter} looks a bit conflicted, but remains angry!`);
+    console.log(`The enemy ${currentEncounter.name} looks a bit conflicted, but remains angry!`);
     // move to encounter's action
   }
 }
@@ -250,6 +288,10 @@ const instanceFlVictoryCheck = end => {
     console.log(`Congratulations! You gallantly fled the enemy ${currentEncounter.name}!`)
     player.speed += currentEncounter.speed;
     escapes++;
+    currentEncounter.health = encounterArray[currentEncounter.arrIndex+1].health;
+    currentEncounter.resilience = encounterArray[currentEncounter.arrIndex+1].resilience;
+    currentEncounter.endurance = encounterArray[currentEncounter.arrIndex+1].endurance;
+    setEncounter();
   }
   else {
     console.log(`The enemy ${currentEncounter.name} looks a bit tired, but doggedly pursues you!`);
