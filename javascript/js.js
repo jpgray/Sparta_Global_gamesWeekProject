@@ -38,13 +38,12 @@ class monster extends encounter{
 
 PName = prompt("Please enter a name for your daring adventurer...") || "Bob";
 if (PName == "Obi-Wan") {console.log("Hello there!")};
-document.getElementById('gameTitle').innerHTML = PName + "'s adventure";
+document.getElementById('gameTitle').innerHTML = `Trials of a Spartan: ${PName}'s Trial`;
 
 const player = new encounter(PName, (PName == "Arnie") ? 1000 : 10, (PName == "Obi-Wan") ? 1000 : 10, (PName == "Usain") ? 1000 : 10, (PName == "Jon Gray") ? 1000 : 100, 0, 0, 0);
-const playerR = new encounter(PName, 10, 10, 10, 100, 0, 0, 0);
-const playerNew = new encounter(PName, 10, 10, 10, 100, 0, 0, 0);
-// const updateHP = (hp) => $('#lifePoints').html = hp;
-// updateHP(player.health)
+const playerR = new encounter(PName, (PName == "Arnie") ? 1000 : 10, (PName == "Obi-Wan") ? 1000 : 10, (PName == "Usain") ? 1000 : 10, (PName == "Jon Gray") ? 1000 : 100, 0, 0, 0);
+const playerPlus = new encounter(PName, (PName == "Arnie") ? 1000 : 10, (PName == "Obi-Wan") ? 1000 : 10, (PName == "Usain") ? 1000 : 10, (PName == "Jon Gray") ? 1000 : 100, 0, 0, 0);
+
 console.log(player);
 
 const Slime = new monster("Slime", 1, 1, 1, 30, 20, 3, 10, "");
@@ -127,7 +126,7 @@ let setEncounter = () => {
     console.log(currentEncounter);
     return BBEG}
   else if (totalVictories() == 21) {
-    console.log(`Congratulations! ${player.name} has won! ${player.name} slew ${kills} foes, befriended ${friends} locals and left ${escapes} chumps in the dust. Would you like to play again?`)
+    updateEvents(`Congratulations! ${player.name} has won! ${player.name} slew ${kills} foes, befriended ${friends} locals and left ${escapes} chumps in the dust. Would you like to play again?`)
     }
   else{
   let ranVal = Math.random() * totalProb;
@@ -135,7 +134,7 @@ let setEncounter = () => {
   for (var i = 1; i < probAccArray.length; i++) {
     if (probAccArray[i-1] <= ranVal && ranVal <= probAccArray[i]) {
       currentEncounter = encounterArray[i];
-      console.log(`A ${currentEncounter.name} was encountered!`);
+      updateEvents(`A ${currentEncounter.name} was encountered!`);
       if (totalVictories() == 0) {console.log("What would you like to do? (Fight/Friend/Flee)")};
       return encounterArray[i];
       }
@@ -181,25 +180,27 @@ fight = () => {
   console.log("player fight" + playerFight);
   currentEncounter.health -= playerFight;
   console.log("enemy hp" + currentEncounter.health)
-  let ehp = currentEncounter.health
+  let ehp = currentEncounter.health;
 
-  instanceFiVictoryCheck(currentEncounter.health);
+  setTimeout(instanceFiVictoryCheck(currentEncounter.health),500);
 
   if (ehp > 0) {
-    console.log(currentEncounter.fightMessage);
+    updateEvents(currentEncounter.fightMessage);
     enemyFight = currentEncounter.strength * ((Math.random())/2 +0.5);
     console.log("enemy fight" + enemyFight);
     player.health -= enemyFight;
     console.log("player hp" + player.health);
 
     if (currentEncounter.name == "Tasty Banana") {
-      console.log(TastyBanana.fiWinMessage);
+      updateEvents(TastyBanana.fiWinMessage),1300;
       currentEncounter.health--;
-      setEncounter();
-    }}
+      setEncounter()}
+  }
+
   deathCheck(player.health);
+
   if (currentEncounter != "") {
-    console.log("What would you like to do? (Fight/Friend/Flee)")
+    updateEvents("What would you like to do? (Fight/Friend/Flee)");
     // health bar switch statement here
   };
 
@@ -293,13 +294,14 @@ flee = () => {
 
 
 const deathCheck = hp => {
+  updateHP();
   if (hp <= 0) {
     //create death game over screen here
-    console.log(`Game over! You killed ${kills} enemies, made ${friends} new friends and escaped ${escapes} encounters!`)
+    updateEvents(`Game over! You killed ${kills} enemies, made ${friends} new friends and escaped ${escapes} encounters!`)
 
   }
   else {
-    console.log(`Still alive! For now...`)
+    updateEvents(`Still alive! For now...`)
   }
 }
 // deathCheck(player.health);
@@ -308,7 +310,7 @@ const instanceFiVictoryCheck = hp => {
 
   if (hp <= 0) {
     //create fight victory here
-    console.log(`Congratulations! You killed the enemy ${currentEncounter.name}`)
+    updateEvents(`Congratulations! You killed the enemy ${currentEncounter.name}`)
     if (currentEncounter.name != "Tasty Banana") {player.strength += 0.5 * currentEncounter.strength};
     kills++;
     currentEncounter.health = encounterArray[currentEncounter.arrIndex+1].health;
@@ -318,7 +320,7 @@ const instanceFiVictoryCheck = hp => {
     FIwin = 1;
   }
   else {
-    console.log(`The enemy ${currentEncounter.name} looks a bit shaken, but ready!`);
+    updateEvents(`The enemy ${currentEncounter.name} looks a bit shaken, but ready!`);
     // move to encounter's action
   }
 }
@@ -327,7 +329,7 @@ const instanceFiVictoryCheck = hp => {
 const instanceFrVictoryCheck = res => {
   if (res <= 0) {
     //create fight victory here, including + player skills
-    console.log(`Congratulations! You have become buddies with the ${currentEncounter.name}!`)
+    updateEvents(`Congratulations! You have become buddies with the ${currentEncounter.name}!`)
     player.charisma += 0.5 * currentEncounter.charisma;
     friends++;
     currentEncounter.health = encounterArray[currentEncounter.arrIndex+1].health;
@@ -337,7 +339,7 @@ const instanceFrVictoryCheck = res => {
     FRwin = 1;
   }
   else {
-    console.log(`The enemy ${currentEncounter.name} looks a bit conflicted, but remains angry!`);
+    updateEvents(`The enemy ${currentEncounter.name} looks a bit conflicted, but remains angry!`);
     // moves to encounter's action
   }
 }
@@ -346,7 +348,7 @@ const instanceFrVictoryCheck = res => {
 const instanceFlVictoryCheck = end => {
   if (end <= 0) {
     //create fight victory here, including + player skills
-    console.log(`Congratulations! You gallantly fled the enemy ${currentEncounter.name}!`)
+    updateEvents(`Congratulations! You gallantly fled the enemy ${currentEncounter.name}!`)
     player.speed += 0.5 * currentEncounter.speed;
     escapes++;
     currentEncounter.health = encounterArray[currentEncounter.arrIndex+1].health;
@@ -356,7 +358,7 @@ const instanceFlVictoryCheck = end => {
     FLwin = 1;
   }
   else {
-    console.log(`The enemy ${currentEncounter.name} looks a bit tired, but doggedly pursues you!`);
+    updateEvents(`The enemy ${currentEncounter.name} looks a bit tired, but doggedly pursues you!`);
     // move to encounter's action
   }
 }
@@ -374,6 +376,61 @@ const instanceFlVictoryCheck = end => {
 
 
 
+
+
+
+
+// display updates
+const hideButton = (BUTTON) => BUTTON.style.visibility="hidden"
+// const reset = () => {
+//   "Game has restarted!";
+//   player = playerR;
+//   let clicked = document.getElementById('newGameButton');
+//   clicked.addEventListener("click", hideButton(clicked));
+//   start();
+//   }
+const set = () => {
+  "Game has begun!";
+  start();
+  let clicked = document.getElementById('newGameButton');
+  clicked.addEventListener("click", hideButton(clicked));
+  }
+
+document.getElementById('newGameButton').addEventListener("click", set);
+
+document.getElementById('FiButton').addEventListener("click", fight);
+document.getElementById('FrButton').addEventListener("click", friend);
+document.getElementById('FlButton').addEventListener("click", flee);
+
+// const healthIcon = document.getElementById("lifeHeart");
+const updateHP = () => {
+  if (player.health<= 0) {
+    document.getElementById("lifeHeart").src="Images/heart0.png"} else
+  if (player.health<= 20) {
+    document.getElementById("lifeHeart").src="Images/heart20.png"} else
+  if (player.health<= 40) {
+    document.getElementById("lifeHeart").src="Images/heart40.png"} else
+  if (player.health<= 60) {
+    document.getElementById("lifeHeart").src="Images/heart60.png"} else
+  if (player.health<= 80) {
+    document.getElementById("lifeHeart").src="Images/heart80.png"}
+  else {document.getElementById("lifeHeart").src="Images/heart.png"}
+}
+
+const eventsBox = [" ",`Are you prepared, ${PName}?`," "];
+document.getElementById('p0').innerHTML = eventsBox[0];
+document.getElementById('p1').innerHTML = eventsBox[1];
+document.getElementById('p2').innerHTML = eventsBox[2];
+
+const updateEvents1 = (message) => {
+  eventsBox.unshift(message);
+  document.getElementById('p0').innerHTML = eventsBox[0];
+  document.getElementById('p1').innerHTML = eventsBox[1];
+  document.getElementById('p2').innerHTML = eventsBox[2];
+
+  return eventsBox[0];
+}
+ const updateEvents = (message, timeout) => setTimeout(() => updateEvents1(message),timeout);
 
 
 
