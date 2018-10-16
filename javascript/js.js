@@ -36,11 +36,15 @@ class monster extends encounter{
 }
 
 
-PName = prompt("Please enter a name for your daring adventurer...")
+PName = prompt("Please enter a name for your daring adventurer...") || "Bob";
+if (PName == "Obi-Wan") {console.log("Hello there!")};
+document.getElementById('gameTitle').innerHTML = PName + "'s adventure";
 
-const player = new encounter(PName, 10, 10, 10, 100, 0, 0, 0);
+const player = new encounter(PName, (PName == "Arnie") ? 1000 : 10, (PName == "Obi-Wan") ? 1000 : 10, (PName == "Usain") ? 1000 : 10, (PName == "Jon Gray") ? 1000 : 100, 0, 0, 0);
 const playerR = new encounter(PName, 10, 10, 10, 100, 0, 0, 0);
 const playerNew = new encounter(PName, 10, 10, 10, 100, 0, 0, 0);
+// const updateHP = (hp) => $('#lifePoints').html = hp;
+// updateHP(player.health)
 console.log(player);
 
 const Slime = new monster("Slime", 1, 1, 1, 30, 20, 3, 10, "");
@@ -122,8 +126,8 @@ let setEncounter = () => {
     currentEncounter = BBEG;
     console.log(currentEncounter);
     return BBEG}
-    else if (totalVictories() == 21) {
-      console.log(`Congratulations! ${player.name} has won! Would you like to play again?`)
+  else if (totalVictories() == 21) {
+    console.log(`Congratulations! ${player.name} has won! ${player.name} slew ${kills} foes, befriended ${friends} locals and left ${escapes} chumps in the dust. Would you like to play again?`)
     }
   else{
   let ranVal = Math.random() * totalProb;
@@ -131,15 +135,16 @@ let setEncounter = () => {
   for (var i = 1; i < probAccArray.length; i++) {
     if (probAccArray[i-1] <= ranVal && ranVal <= probAccArray[i]) {
       currentEncounter = encounterArray[i];
-      console.log(`A ${currentEncounter.name} was encountered!`)
-      console.log("What would you like to do? (Fight/Friend/Flee)")
+      console.log(`A ${currentEncounter.name} was encountered!`);
+      if (totalVictories() == 0) {console.log("What would you like to do? (Fight/Friend/Flee)")};
       return encounterArray[i];
       }
     }
+
   }
 }
 
-setEncounter();
+const start = () => setEncounter();
 
 
 
@@ -193,6 +198,10 @@ fight = () => {
       setEncounter();
     }}
   deathCheck(player.health);
+  if (currentEncounter != "") {
+    console.log("What would you like to do? (Fight/Friend/Flee)")
+    // health bar switch statement here
+  };
 
 }
 // currentEncounter.fight;
@@ -219,6 +228,7 @@ friend = () => {
     setEncounter();
   }}
   deathCheck(player.health);
+  console.log("What would you like to do? (Fight/Friend/Flee)");
 
 }
 // currentEncounter.fight;
@@ -246,6 +256,7 @@ flee = () => {
     setEncounter();
   }}
   deathCheck(player.health);
+  console.log("What would you like to do? (Fight/Friend/Flee)");
 
 }
 // currentEncounter.fight;
@@ -308,7 +319,6 @@ const instanceFiVictoryCheck = hp => {
   }
   else {
     console.log(`The enemy ${currentEncounter.name} looks a bit shaken, but ready!`);
-    console.log("What would you like to do? (Fight/Friend/Flee)");
     // move to encounter's action
   }
 }
@@ -328,7 +338,6 @@ const instanceFrVictoryCheck = res => {
   }
   else {
     console.log(`The enemy ${currentEncounter.name} looks a bit conflicted, but remains angry!`);
-    console.log("What would you like to do? (Fight/Friend/Flee)");
     // moves to encounter's action
   }
 }
@@ -348,7 +357,6 @@ const instanceFlVictoryCheck = end => {
   }
   else {
     console.log(`The enemy ${currentEncounter.name} looks a bit tired, but doggedly pursues you!`);
-    console.log("What would you like to do? (Fight/Friend/Flee)")
     // move to encounter's action
   }
 }
