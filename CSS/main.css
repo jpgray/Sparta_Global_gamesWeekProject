@@ -118,6 +118,7 @@ body {
   background-color: rgba(37, 51, 42, 0.8);
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
+  max-height: 300px;
 }
 
 .eventp {

@@ -2,7 +2,8 @@
 let encounterCount = 0;
 let encounterArray = [];
 let probArray = [];
-let fight;
+// let fight;
+let tUnit = 1200;
 
 
 class encounter {
@@ -58,7 +59,7 @@ const GiantRat = new monster("Giant Rat", 3, 3, 3, 30, 5, 20, 5, "");
 const GiantRatR = new monster("", 0, 0, 0, 30, 5, 20, 0, "");
 console.log(GiantRat);
 
-const TastyBanana = new monster("Tasty Banana", -100, 0, 0, 0.01, 100, 0, 1, "");
+const TastyBanana = new monster("Tasty Banana", -100, 4, 6, 0.01, 100, 0.01, 1, "");
 const TastyBananaR = new monster("", 0, 0, 0, 1, 100, 0, 0, "");
 TastyBanana.fiWinMessage = "You destroy what most assuredly was a villainous opponent plotting evil in a fit of rage against it's insulting attempt of temptation.";
 TastyBanana.friendMessage = "You successfully negotiate the banana into your stomach. It is tasty."
@@ -134,8 +135,8 @@ let setEncounter = () => {
   for (var i = 1; i < probAccArray.length; i++) {
     if (probAccArray[i-1] <= ranVal && ranVal <= probAccArray[i]) {
       currentEncounter = encounterArray[i];
-      updateEvents(`A ${currentEncounter.name} was encountered!`);
-      if (totalVictories() == 0) {console.log("What would you like to do? (Fight/Friend/Flee)")};
+      updateEvents(`A ${currentEncounter.name} was encountered!`,2*tUnit);
+      if (totalVictories() == 0) {updateEvents("What would you like to do?",3*tUnit)};
       return encounterArray[i];
       }
     }
@@ -182,29 +183,26 @@ fight = () => {
   console.log("enemy hp" + currentEncounter.health)
   let ehp = currentEncounter.health;
 
-  setTimeout(instanceFiVictoryCheck(currentEncounter.health),500);
+  instanceFiVictoryCheck(currentEncounter.health);
 
   if (ehp > 0) {
-    updateEvents(currentEncounter.fightMessage);
+    updateEvents(currentEncounter.fightMessage, 2*tUnit);
     enemyFight = currentEncounter.strength * ((Math.random())/2 +0.5);
     console.log("enemy fight" + enemyFight);
     player.health -= enemyFight;
     console.log("player hp" + player.health);
 
-    if (currentEncounter.name == "Tasty Banana") {
-      updateEvents(TastyBanana.fiWinMessage),1300;
-      currentEncounter.health--;
-      setEncounter()}
+    // if (currentEncounter.name == "Tasty Banana") {
+    //   currentEncounter.health--;
+    //   setEncounter()}
   }
 
   deathCheck(player.health);
 
-  if (currentEncounter != "") {
-    updateEvents("What would you like to do? (Fight/Friend/Flee)");
-    // health bar switch statement here
+  if(player.health>0 && currentEncounter != "" && currentEncounter != TastyBanana) {updateEvents("What would you like to do?",3*tUnit)};
   };
 
-}
+// }
 // currentEncounter.fight;
 
 friend = () => {
@@ -218,18 +216,18 @@ friend = () => {
   instanceFrVictoryCheck(currentEncounter.resilience);
 
   if (res > 0) {
-    console.log(currentEncounter.friendMessage);
+    updateEvents(currentEncounter.friendMessage,2*tUnit);
     enemyFight = currentEncounter.strength * ((Math.random())/2 +0.5);
     console.log("enemy fight" + enemyFight);
     player.health -= enemyFight;
     console.log("player hp" + player.health);
 
   if (currentEncounter.name == "Tasty Banana") {
-    currentEncounter.health--;
-    setEncounter();
+    // currentEncounter.health--;
+    setTimeout(setEncounter,tUnit);
   }}
   deathCheck(player.health);
-  console.log("What would you like to do? (Fight/Friend/Flee)");
+  if(player.health>0 && currentEncounter != "" && currentEncounter != TastyBanana) {updateEvents("What would you like to do?",3*tUnit)};
 
 }
 // currentEncounter.fight;
@@ -245,20 +243,19 @@ flee = () => {
   instanceFlVictoryCheck(currentEncounter.endurance);
 
   if (end > 0) {
-    console.log(currentEncounter.fleeMessage);
+    updateEvents(currentEncounter.fleeMessage,2*tUnit);
     enemyFight = currentEncounter.strength * ((Math.random())/2 +0.5);
     console.log("enemy fight" + enemyFight);
     player.health -= enemyFight;
     console.log("player hp" + player.health);
 
-  if (currentEncounter.name == "Tasty Banana") {
-    console.log(TastyBanana.frWinMessage)
-    currentEncounter.health--;
-    setEncounter();
-  }}
+  // if (currentEncounter.name == "Tasty Banana") {
+  //   currentEncounter.health--;
+  //   setEncounter();
+  }
   deathCheck(player.health);
-  console.log("What would you like to do? (Fight/Friend/Flee)");
 
+  if(player.health>0 && currentEncounter != "" && currentEncounter != TastyBanana) {updateEvents("What would you like to do?",3*tUnit)};
 }
 // currentEncounter.fight;
 
@@ -297,11 +294,11 @@ const deathCheck = hp => {
   updateHP();
   if (hp <= 0) {
     //create death game over screen here
-    updateEvents(`Game over! You killed ${kills} enemies, made ${friends} new friends and escaped ${escapes} encounters!`)
+    updateEvents(`Game over! You killed ${kills} enemies, made ${friends} new friends and escaped ${escapes} encounters!`,3*tUnit)
 
   }
   else {
-    updateEvents(`Still alive! For now...`)
+    // updateEvents(`Still alive! For now...`,3*tUnit)
   }
 }
 // deathCheck(player.health);
@@ -310,17 +307,22 @@ const instanceFiVictoryCheck = hp => {
 
   if (hp <= 0) {
     //create fight victory here
-    updateEvents(`Congratulations! You killed the enemy ${currentEncounter.name}`)
-    if (currentEncounter.name != "Tasty Banana") {player.strength += 0.5 * currentEncounter.strength};
+    if (currentEncounter.name == "Tasty Banana") {
+      updateEvents(TastyBanana.fiWinMessage,tUnit);
+    }
+    else{
+    updateEvents(`Congratulations! You killed the enemy ${currentEncounter.name}! `,tUnit);
+    player.strength += 0.5 * currentEncounter.strength;}
     kills++;
     currentEncounter.health = encounterArray[currentEncounter.arrIndex+1].health;
     currentEncounter.resilience = encounterArray[currentEncounter.arrIndex+1].resilience;
     currentEncounter.endurance = encounterArray[currentEncounter.arrIndex+1].endurance;
     setEncounter();
-    FIwin = 1;
-  }
+    // FIwin = 1;
+
+}
   else {
-    updateEvents(`The enemy ${currentEncounter.name} looks a bit shaken, but ready!`);
+    updateEvents(`The enemy ${currentEncounter.name} looks a bit shaken, but ready!`,tUnit);
     // move to encounter's action
   }
 }
@@ -329,17 +331,17 @@ const instanceFiVictoryCheck = hp => {
 const instanceFrVictoryCheck = res => {
   if (res <= 0) {
     //create fight victory here, including + player skills
-    updateEvents(`Congratulations! You have become buddies with the ${currentEncounter.name}!`)
+    updateEvents(`Congratulations! You have become buddies with the ${currentEncounter.name}!`,tUnit)
     player.charisma += 0.5 * currentEncounter.charisma;
     friends++;
     currentEncounter.health = encounterArray[currentEncounter.arrIndex+1].health;
     currentEncounter.resilience = encounterArray[currentEncounter.arrIndex+1].resilience;
     currentEncounter.endurance = encounterArray[currentEncounter.arrIndex+1].endurance;
     setEncounter();
-    FRwin = 1;
+    // FRwin = 1;
   }
-  else {
-    updateEvents(`The enemy ${currentEncounter.name} looks a bit conflicted, but remains angry!`);
+  else if (currentEncounter != TastyBanana){
+    updateEvents(`The enemy ${currentEncounter.name} looks a bit conflicted, but remains angry!`,tUnit);
     // moves to encounter's action
   }
 }
@@ -347,18 +349,21 @@ const instanceFrVictoryCheck = res => {
 
 const instanceFlVictoryCheck = end => {
   if (end <= 0) {
-    //create fight victory here, including + player skills
-    updateEvents(`Congratulations! You gallantly fled the enemy ${currentEncounter.name}!`)
+    if (currentEncounter.name == "Tasty Banana") {
+      updateEvents(TastyBanana.flWinMessage,tUnit);
+    }
+    else{
+    updateEvents(`Congratulations! You gallantly fled the enemy ${currentEncounter.name}!`,tUnit)}
     player.speed += 0.5 * currentEncounter.speed;
     escapes++;
     currentEncounter.health = encounterArray[currentEncounter.arrIndex+1].health;
     currentEncounter.resilience = encounterArray[currentEncounter.arrIndex+1].resilience;
     currentEncounter.endurance = encounterArray[currentEncounter.arrIndex+1].endurance;
     setEncounter();
-    FLwin = 1;
+    // FLwin = 1;
   }
   else {
-    updateEvents(`The enemy ${currentEncounter.name} looks a bit tired, but doggedly pursues you!`);
+    updateEvents(`The enemy ${currentEncounter.name} looks a bit tired, but doggedly pursues you!`,tUnit);
     // move to encounter's action
   }
 }
