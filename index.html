@@ -3,7 +3,8 @@
   <head>
     <meta charset="utf-8">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <link rel="stylesheet" href="CSS/main.css">
+    <link rel="stylesheet" href="CSS/main2.css">
+    <link rel="icon" href="Images/SpartanI.png">
     <title> The Trials of a Spartan</title>
     <!-- put icon here -->
   </head>
@@ -14,23 +15,30 @@
         <h1 id="gameTitle"> Untitled </h1>
       </header>
       <section class ="grid2">
-        <figure class ="encounter"><img src="Images/stevenSeagal.png" alt="placeholder" class="placeholder" >
-        </figure>
+
+        <div id="pImage"></div>
+        <figure class ="encounter"><img src="Images/stevenSeagal.png" alt="placeholder" class="placeholder" ></figure>
+        <div id="eImage"></div>
+
         <button class ="buttons" id="newGameButton"> Start a new game!</button>
+
         <aside class ="hp grid3">
           <img src="Images/heart.png" id="lifeHeart">
           <!-- <p class="lifePoints">  </p> -->
         </aside>
+
         <summary class ="events">
           <p class="eventp" id="p0"> ERROR</p>
           <p class="eventp" id="p1"> ERROR</p>
           <p class="eventp" id="p2"> ERROR</p>
         </summary>
+
         <aside class ="options grid4">
           <button class="buttons" id="FiButton"> Fight </button>
           <button class="buttons" id="FrButton"> Befriend </button>
           <button class="buttons" id="FlButton"> Flee </button>
         </aside>
+
       </section>
     </div>
     <script src="javascript/js.js"></script>

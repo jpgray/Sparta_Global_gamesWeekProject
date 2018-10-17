@@ -3,8 +3,9 @@ let encounterCount = 0;
 let encounterArray = [];
 let probArray = [];
 // let fight;
-let tUnit = 1200;
-
+let tUnit = 2000;
+// 1200 seems appropriate
+let fBbuttons = document.getElementsByClassName('buttons');
 
 class encounter {
   constructor(name, strength, charisma, speed, health, resilience, endurance, encounterChance, image, fightMessage, friendMessage, fleeMessage) {
@@ -41,39 +42,42 @@ PName = prompt("Please enter a name for your daring adventurer...") || "Bob";
 if (PName == "Obi-Wan") {console.log("Hello there!")};
 document.getElementById('gameTitle').innerHTML = `Trials of a Spartan: ${PName}'s Trial`;
 
-const player = new encounter(PName, (PName == "Arnie") ? 1000 : 10, (PName == "Obi-Wan") ? 1000 : 10, (PName == "Usain") ? 1000 : 10, (PName == "Jon Gray") ? 1000 : 100, 0, 0, 0);
-const playerR = new encounter(PName, (PName == "Arnie") ? 1000 : 10, (PName == "Obi-Wan") ? 1000 : 10, (PName == "Usain") ? 1000 : 10, (PName == "Jon Gray") ? 1000 : 100, 0, 0, 0);
-const playerPlus = new encounter(PName, (PName == "Arnie") ? 1000 : 10, (PName == "Obi-Wan") ? 1000 : 10, (PName == "Usain") ? 1000 : 10, (PName == "Jon Gray") ? 1000 : 100, 0, 0, 0);
+
+
+
+const player = new encounter(PName, (PName == "Steven Seagal") ? 1000 : 10, (PName == "Obi-Wan") ? 1000 : 10, (PName == "Usain") ? 1000 : 10, (PName == "Jon Gray") ? 1000 : 100, 0, 0, 0);
+const playerR = new encounter(PName, (PName == "Steven Seagal") ? 1000 : 10, (PName == "Obi-Wan") ? 1000 : 10, (PName == "Usain") ? 1000 : 10, (PName == "Jon Gray") ? 1000 : 100, 0, 0, 0);
+const playerPlus = new encounter(PName, (PName == "Steven Seagal") ? 1000 : 10, (PName == "Obi-Wan") ? 1000 : 10, (PName == "Usain") ? 1000 : 10, (PName == "Jon Gray") ? 1000 : 100, 0, 0, 0);
 
 console.log(player);
 
-const Slime = new monster("Slime", 1, 1, 1, 30, 20, 3, 10, "");
+const Slime = new monster("Slime", 1, 1, 1, 30, 20, 3, 10, "url('Images/Slime.png')");
 const SlimeR = new monster("", 0, 0, 0, 30, 20, 3, 0, "");
 console.log(Slime);
 
-const Rock = new monster("Rock", 0, 1000, 0, 200, 1000, 0, 1, "");
+const Rock = new monster("Rock", 0, 1000, 0, 200, 1000, 0, 1, "url('Images/rock.png')");
 const RockR = new monster("", 0, 0, 0, 200, 1000, 0, 0, "");
 console.log(Rock);
 
-const GiantRat = new monster("Giant Rat", 3, 3, 3, 30, 5, 20, 5, "");
+const GiantRat = new monster("Giant Rat", 3, 3, 3, 30, 5, 20, 5, "url('Images/giantRat.png')");
 const GiantRatR = new monster("", 0, 0, 0, 30, 5, 20, 0, "");
 console.log(GiantRat);
 
-const TastyBanana = new monster("Tasty Banana", -100, 4, 6, 0.01, 100, 0.01, 1, "");
+const TastyBanana = new monster("Tasty Banana", -100, 4, 6, 0.01, 100, 0.01, 1, "url('Images/tastyBanana.png')");
 const TastyBananaR = new monster("", 0, 0, 0, 1, 100, 0, 0, "");
 TastyBanana.fiWinMessage = "You destroy what most assuredly was a villainous opponent plotting evil in a fit of rage against it's insulting attempt of temptation.";
 TastyBanana.friendMessage = "You successfully negotiate the banana into your stomach. It is tasty."
 console.log(TastyBanana);
 
-const Vampire = new monster("Vampire", 15, 8, 3, 50, 8, 20, 3, "");
-const VampireR = new monster("", 0, 0, 0, 50, 8, 20, 0, "");
-console.log(Vampire);
+const Zombie = new monster("Zombie", 15, 8, 3, 50, 8, 20, 3, "url('Images/zombie.png')");
+const ZombieR = new monster("", 0, 0, 0, 50, 8, 20, 0, "");
+console.log(Zombie);
 
-const Goblin = new monster("Goblin", 9, 18, 14, 35, 8, 20, 4, "");
+const Goblin = new monster("Goblin", 9, 18, 14, 35, 8, 20, 4, "url('Images/goblin.png')");
 const GoblinR = new monster("", 0, 0, 0, 35, 8, 20, 0, "");
 console.log(Goblin);
 
-const BBEG = new monster("BBEG", 25, 25, 25, 100, 100, 100, 0, "");
+const BBEG = new monster("BBEG", 25, 25, 25, 100, 100, 100, 0, "url('Images/BBEG.png')");
 const BBEGR = new monster("", 0, 0, 0, 35, 8, 20, 0, "");
 console.log(BBEG);
 
@@ -124,8 +128,10 @@ let setEncounter = () => {
   console.log(totalVictories())
   if (totalVictories() == 20) {
     currentEncounter = BBEG;
-    console.log(currentEncounter);
-    return BBEG}
+    updateEvents(`The ${currentEncounter.name} has shown itself!`,2*tUnit);
+    setEncImage(2*tUnit);
+
+    return BBEG;}
   else if (totalVictories() == 21) {
     updateEvents(`Congratulations! ${player.name} has won! ${player.name} slew ${kills} foes, befriended ${friends} locals and left ${escapes} chumps in the dust. Would you like to play again?`)
     }
@@ -136,19 +142,50 @@ let setEncounter = () => {
     if (probAccArray[i-1] <= ranVal && ranVal <= probAccArray[i]) {
       currentEncounter = encounterArray[i];
       updateEvents(`A ${currentEncounter.name} was encountered!`,2*tUnit);
+      setEncImage(2*tUnit);
       if (totalVictories() == 0) {updateEvents("What would you like to do?",3*tUnit)};
       return encounterArray[i];
       }
     }
-
+  for (var i = 0; i < fButtons.length; i++) {
+    // unhideButton(fButtons[i]);
+  }
   }
 }
 
-const start = () => setEncounter();
+const start = () => {setEncounter();
+  let PImage = Math.floor(Math.random()*6+1);
+  console.log(PImage)
+  switch (PImage) {
+    case 1:
+    document.getElementById("pImage").style.backgroundImage = "url('Images/adventurer1.png')";
+    break;
+  case 2:
+    document.getElementById("pImage").style.backgroundImage = "url('Images/adventurer2.png')";
+    break;
+  case 3:
+    document.getElementById("pImage").style.backgroundImage = "url('Images/adventurer3.png')";
+    break;
+  case 4:
+    document.getElementById("pImage").style.backgroundImage = "url('Images/adventurer4.png')";
+    break;
+  case 5:
+    document.getElementById("pImage").style.backgroundImage = "url('Images/adventurer5.png')";
+    break;
+  case 6:
+    document.getElementById("pImage").style.backgroundImage = "url('Images/adventurer6.png')";
+    break;
+  default:
+    document.getElementById("pImage").style.backgroundImage = "url('Images/stevenSeagal.png')";
+    break;
 
-
-
-
+}
+}
+const changeEImage = () => {
+  document.getElementById("eImage").style.backgroundImage = currentEncounter.image;
+}
+const setEncImage = (timeout) => {setTimeout(changeEImage,timeout)
+}
 
 
 
@@ -387,6 +424,7 @@ const instanceFlVictoryCheck = end => {
 
 // display updates
 const hideButton = (BUTTON) => BUTTON.style.visibility="hidden"
+const unhideButton = (BUTTON) => BUTTON.style.visibility="visible"
 // const reset = () => {
 //   "Game has restarted!";
 //   player = playerR;
