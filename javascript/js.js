@@ -253,16 +253,20 @@ const setEncImage = (timeout) => {setTimeout(changeEImage,timeout)
 
 fight = () => {
   hideAllF();
+  playActionSound("Music/fight.wav");
   // FIwin = 0;
   playerFight = player.strength * ((Math.random())/2 +0.5);
   console.log("player fight" + playerFight);
   currentEncounter.health -= playerFight;
   console.log("enemy hp" + currentEncounter.health)
   let ehp = currentEncounter.health;
+  setTimeout(pAttackShow,0);
 
   instanceFiVictoryCheck(currentEncounter.health);
 
   if (ehp > 0) {
+    playActionSound("Music/eAttackSound.mp3",2*tUnit);
+    setTimeout(eAttackShow,2*tUnit);
     updateEvents(currentEncounter.fightMessage, 2*tUnit);
     enemyFight = currentEncounter.strength * ((Math.random())/2 +0.5);
     console.log("enemy fight" + enemyFight);
@@ -282,6 +286,7 @@ fight = () => {
 // currentEncounter.fight;
 
 friend = () => {
+  playActionSound("Music/friend.mp3");
   hideAllF();
   // FRwin = 0;
   playerFriend = player.charisma * ((Math.random())/2 +0.5);
@@ -293,6 +298,8 @@ friend = () => {
   instanceFrVictoryCheck(currentEncounter.resilience);
 
   if (res > 0) {
+    playActionSound("Music/eAttackSound.mp3",2*tUnit);
+    setTimeout(eAttackShow,2*tUnit);
     updateEvents(currentEncounter.friendMessage,2*tUnit);
     enemyFight = currentEncounter.strength * ((Math.random())/2 +0.5);
     console.log("enemy fight" + enemyFight);
@@ -310,6 +317,7 @@ friend = () => {
 // currentEncounter.fight;
 
 flee = () => {
+  playActionSound("Music/flee.mp3");
   hideAllF();
   // FLwin = 0;
   playerFlee = player.speed * ((Math.random())/2 +0.5);
@@ -321,6 +329,8 @@ flee = () => {
   instanceFlVictoryCheck(currentEncounter.endurance);
 
   if (end > 0) {
+    playActionSound("Music/eAttackSound.mp3",2*tUnit);
+    setTimeout(eAttackShow,2*tUnit);
     updateEvents(currentEncounter.fleeMessage,2*tUnit);
     enemyFight = currentEncounter.strength * ((Math.random())/2 +0.5);
     console.log("enemy fight" + enemyFight);
@@ -550,8 +560,31 @@ const victoryFrScreen = "Images/victoryFr.png";
 const victoryFlScreen = "Images/victoryFl.png";
 const victoryBalScreen = "Images/victoryBal.png";
 
+const pAttack = document.getElementById("pAttack");
+const eAttack = document.getElementById("eAttack");
+const pAttackShow = () => {
+  pAttack.src = `Images/pAttack.gif`;
+  setTimeout(() => {pAttack.src = ``},500);
+};
+const eAttackShow = () => {
+  eAttack.src = `Images/eAttack1.gif`;
+  setTimeout(() => {eAttack.src = ``},500);
+};
+
+
+
+
+
+
+// Sound effects
+
+
 const music = document.getElementById('ambience');
 const newMusic = (address,timeout) => setTimeout(() => {music.src = `${address}`},timeout);
+
+const actionSound = document.getElementById('pActionSound');
+actionSound.loop = false;
+const playActionSound = (address,timeout) => setTimeout(() => {actionSound.src = address},timeout);
 
 
 
