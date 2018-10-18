@@ -5,7 +5,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <link rel="stylesheet" href="CSS/main2.css">
     <link rel="icon" href="Images/SpartanI.png">
-    <title> The Trials of a Spartan</title>
+    <title>Trials of a Spartan</title>
     <!-- put icon here -->
   </head>
   <body>
@@ -17,10 +17,13 @@
       <section class ="grid2">
 
         <div id="pImage"></div>
-        <figure class ="encounter"><img src="Images/stevenSeagal.png" alt="placeholder" class="placeholder" ></figure>
+        <figure class ="encounter" id="screen"></figure>
         <div id="eImage"></div>
 
         <button class ="buttons" id="newGameButton"> Start a new game!</button>
+
+        <audio loop="true" id = "ambience" src = "" autoplay controls></audio>
+
 
         <aside class ="hp grid3">
           <img src="Images/heart.png" id="lifeHeart">
@@ -34,9 +37,9 @@
         </summary>
 
         <aside class ="options grid4">
-          <button class="buttons" id="FiButton"> Fight </button>
-          <button class="buttons" id="FrButton"> Befriend </button>
-          <button class="buttons" id="FlButton"> Flee </button>
+          <button class="buttons fbuttons" id="FiButton"> Fight </button>
+          <button class="buttons fbuttons" id="FrButton"> Befriend </button>
+          <button class="buttons fbuttons" id="FlButton"> Flee </button>
         </aside>
 
       </section>
