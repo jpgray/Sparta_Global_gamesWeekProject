@@ -135,14 +135,14 @@ let setEncounter = () => {
     currentEncounter = BBEG;
     updateEvents(`The ${currentEncounter.name} has shown itself!`,2*tUnit);
     setEncImage(2*tUnit);
-    newMusic("Music/battle.mp3",2*tUnit)
+    newMusic("Music/battle.mp3",2*tUnit,0.1)
     return BBEG;}
 
   else if (totalVictories() == 21) {
     currentEncounter = "";
     setTimeout(unhideNewGameButton,2*tUnit);
     music.loop=false;
-    newMusic("Music/victory.mp3");
+    newMusic("Music/victory.mp3",tUnit,0.2);
 
     //variable win screens
     if (kills == 21) {
@@ -580,9 +580,10 @@ const eAttackShow = () => {
 
 
 const music = document.getElementById('ambience');
-const newMusic = (address,timeout) => setTimeout(() => {music.src = `${address}`},timeout);
+const newMusic = (address,timeout,loudness) => setTimeout(() => {music.src = `${address}`; music.volume = loudness},timeout);
 
 const actionSound = document.getElementById('pActionSound');
+actionSound.volume = 0.1;
 actionSound.loop = false;
 const playActionSound = (address,timeout) => setTimeout(() => {actionSound.src = address},timeout);
 
