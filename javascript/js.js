@@ -9,7 +9,7 @@ let tUnit = 1200;
 let fBbuttons = document.getElementsByClassName('buttons');
 
 class encounter {
-  constructor(name, strength, charisma, speed, health, resilience, endurance, encounterChance, image, fightMessage, friendMessage, fleeMessage) {
+  constructor(name, strength, charisma, speed, health, resilience, endurance, encounterChance, image, fightMessage, friendMessage, fleeMessage, arrIndex) {
   this.name = name;
   this.strength = strength;
   this.charisma = charisma;
@@ -25,7 +25,7 @@ class encounter {
   this.arrIndex = encounterCount;
   encounterArray.push(this);
   encounterCount++;
-  probArray.push(encounterChance);
+  probArray.push(this.encounterChance);
   }
 }
 
@@ -56,9 +56,15 @@ const Slime = new monster("Slime", 1, 1, 1, 30, 20, 3, 10, "url('Images/Slime.pn
 const SlimeR = new monster("", 0, 0, 0, 30, 20, 3, 0, "");
 console.log(Slime);
 
-const Rock = new monster("Rock", 0, 1000, 0, 200, 1000, 0, 1, "url('Images/rock.png')");
+const Rock = new monster("Rock", 0, 1000, 0, 200, 1000, 0, 0, "url('Images/rock.png')");
 const RockR = new monster("", 0, 0, 0, 200, 1000, 0, 0, "");
+Rock.fightMessage = "The Rock remains unstirred"
 console.log(Rock);
+
+const furiousRockShards = new monster("Furious Rock Shards", 22, 1000, 0, 120, 65, 30, 0, "url('Images/angryRockShards.png')");
+const furiousRockShardsR = new monster("", 0, 0, 0, 120, 65, 30, 0, "");
+furiousRockShards.fightMessage = "The Furious Rock Shards strike in revenge!"
+console.log(furiousRockShards);
 
 const GiantRat = new monster("Giant Rat", 3, 3, 3, 30, 5, 20, 5, "url('Images/giantRat.png')");
 const GiantRatR = new monster("", 0, 0, 0, 30, 5, 20, 0, "");
@@ -120,12 +126,22 @@ let totalVictories = () => kills + escapes + friends;
 //Setting encounter
 
 
+let probAccArray = [0];
+
+const updateProbArray = () => {
+  probArray = []
+for (var i = 0; i < encounterArray.length; i++) {
+  probArray.push(encounterArray[i].encounterChance)
+}}
 
 probArray.push(0);
-let probAccArray = [0];
+const updateProbAcc = () => {
+  updateProbArray();
+  probAccArray = [0];
 for (var i = 1; i < probArray.length; i++) {
   probAccArray.push(probArray[i] + probAccArray[i-1])
-}
+}}
+updateProbAcc();
 
 
 let currentEncounter;
@@ -253,8 +269,9 @@ const setEncImage = (timeout) => {setTimeout(changeEImage,timeout)
 
 fight = () => {
   hideAllF();
-  playActionSound("Music/fight.wav");
-  // FIwin = 0;
+  playActionSound("Music/fight.wav",0,0.5);
+  setTimeout(() => {document.getElementById('ambience').volume = 1},500)
+  // FIwin = 0;0
   playerFight = player.strength * ((Math.random())/2 +0.5);
   console.log("player fight" + playerFight);
   currentEncounter.health -= playerFight;
@@ -265,7 +282,8 @@ fight = () => {
   instanceFiVictoryCheck(currentEncounter.health);
 
   if (ehp > 0) {
-    playActionSound("Music/eAttackSound.mp3",2*tUnit);
+    playActionSound("Music/eAttackSound.mp3",2*tUnit,0.7);
+    setTimeout(() => {document.getElementById('ambience').volume = 1},2*tUnit+500)
     setTimeout(eAttackShow,2*tUnit);
     updateEvents(currentEncounter.fightMessage, 2*tUnit);
     enemyFight = currentEncounter.strength * ((Math.random())/2 +0.5);
@@ -286,7 +304,7 @@ fight = () => {
 // currentEncounter.fight;
 
 friend = () => {
-  playActionSound("Music/friend.mp3");
+  playActionSound("Music/friend.mp3",0,1);
   hideAllF();
   // FRwin = 0;
   playerFriend = player.charisma * ((Math.random())/2 +0.5);
@@ -298,7 +316,8 @@ friend = () => {
   instanceFrVictoryCheck(currentEncounter.resilience);
 
   if (res > 0) {
-    playActionSound("Music/eAttackSound.mp3",2*tUnit);
+    playActionSound("Music/eAttackSound.mp3",2*tUnit,0.7);
+    setTimeout(() => {document.getElementById('ambience').volume = 1},500)
     setTimeout(eAttackShow,2*tUnit);
     updateEvents(currentEncounter.friendMessage,2*tUnit);
     enemyFight = currentEncounter.strength * ((Math.random())/2 +0.5);
@@ -317,10 +336,11 @@ friend = () => {
 // currentEncounter.fight;
 
 flee = () => {
-  playActionSound("Music/flee.mp3");
+  playActionSound("Music/flee.mp3",0,0.2);
+  setTimeout(() => {document.getElementById('ambience').volume = 1},500)
   hideAllF();
   // FLwin = 0;
-  playerFlee = player.speed * ((Math.random())/2 +0.5);
+  playerFlee = player.speed * ((Math.random())/2 +0.7);
   console.log(playerFlee);
   currentEncounter.endurance -= playerFlee;
   console.log(currentEncounter.endurance)
@@ -329,7 +349,8 @@ flee = () => {
   instanceFlVictoryCheck(currentEncounter.endurance);
 
   if (end > 0) {
-    playActionSound("Music/eAttackSound.mp3",2*tUnit);
+    playActionSound("Music/eAttackSound.mp3",2*tUnit,0.4);
+    setTimeout(() => {document.getElementById('ambience').volume = 1},500)
     setTimeout(eAttackShow,2*tUnit);
     updateEvents(currentEncounter.fleeMessage,2*tUnit);
     enemyFight = currentEncounter.strength * ((Math.random())/2 +0.5);
@@ -403,10 +424,24 @@ const instanceFiVictoryCheck = hp => {
     if (currentEncounter.name == "Tasty Banana") {
       updateEvents(TastyBanana.fiWinMessage,tUnit);
     }
+
+    if (currentEncounter.name == "Rock"){
+      Rock.encounterChance = 0;
+    }
     else{
     updateEvents(`Congratulations! You killed the enemy ${currentEncounter.name}! `,tUnit);
     player.strength += 0.5 * currentEncounter.strength;}
     kills++;
+    if (currentEncounter.name == "Rock"){
+      Rock.encounterChance = 0;
+      furiousRockShards.encounterChance = 10;
+      updateProbAcc();
+      }
+    else if (currentEncounter.name == "Furious Rock Shards") {
+      Eock.encounterChance = 2;
+      furiousRockShards.encounterChance = 0;
+      updateProbAcc();
+    }
     currentEncounter.health = encounterArray[currentEncounter.arrIndex+1].health;
     currentEncounter.resilience = encounterArray[currentEncounter.arrIndex+1].resilience;
     currentEncounter.endurance = encounterArray[currentEncounter.arrIndex+1].endurance;
@@ -499,7 +534,7 @@ const unhideAllTimer = (timeout) => setTimeout(unhideAllF,timeout)
 
 const set = () => {
   updateEvents(`${player.name} has begun their attempt!`);
-  newMusic("Music/ambience.mp3");
+  newMusic("Music/ambience.mp3",0,1);
   music.loop = true;
   kills = 0;
   friends = 0;
@@ -583,9 +618,9 @@ const music = document.getElementById('ambience');
 const newMusic = (address,timeout,loudness) => setTimeout(() => {music.src = `${address}`; music.volume = loudness},timeout);
 
 const actionSound = document.getElementById('pActionSound');
-actionSound.volume = 0.1;
+// actionSound.volume = 0.1;
 actionSound.loop = false;
-const playActionSound = (address,timeout) => setTimeout(() => {actionSound.src = address},timeout);
+const playActionSound = (address,timeout,loudness) => setTimeout(() => {actionSound.src = address; actionSound.volume = loudness},timeout);
 
 
 
