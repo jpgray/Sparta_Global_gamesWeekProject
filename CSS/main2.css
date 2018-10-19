@@ -1,0 +1,249 @@
+/* @supports(display: grid) { */
+/* To target modern browsers only */
+body {
+  /* background-color: pink; */
+  font-family: serif;
+  background-image: url(../Images/wallpaper.png);
+  background-size: cover;
+}
+
+#instructions {
+  background-image: url(../Images/instructions.png);
+  background-size: cover;
+}
+
+* {
+  box-sizing: border-box;
+  /* border-color: black; */
+}
+
+/* main div grid */
+.grid1 {
+  display:grid;
+  grid-template-areas:
+  "head head head"
+  ". gameArea ."
+  ". instructions ."
+  ". links .";
+  grid-template-columns: 1fr 3fr 1fr;
+  grid-template-rows: 1fr 3fr 1fr 1fr;
+  /* grid-gap: 0.1fr; */
+  max-height: 300px
+}
+
+  .gameTitle {
+    grid-area: head;
+    text-align: center;
+    /* background-color: red; */
+    color: navajowhite;
+    background-color: rgba(0,0,0,0.8);
+  }
+
+  /* game area grid */
+  .grid2 {
+    grid-area: gameArea;
+    display:grid;
+    grid-template-areas:
+    "pImage encounter encounter encounter eImage"
+    "links . newGame ambience ambience"
+    /* "hp events events events choice" */
+    "hp events events events choice";
+    grid-template-columns: 1.5fr 0.5fr 4fr 0.5fr 1.5fr;
+    grid-template-rows: 4fr 0.3fr 2.5fr;
+    grid-gap: 0.1fr;
+    /* background-color: blue; */
+    background: url("../Images/cave.jpg");
+    background-size: cover;
+    width: 100%;
+    justify-content: center;
+  }
+
+    #pImage {
+      grid-area: pImage;
+      /* height: 50%; */
+      width: 250px;
+      /* background-color: purple; */
+      filter: grayscale(0);
+      background-image: url();
+      background-size: cover ;
+      /* margin-top: 10%; */
+      align-items: flex-end;
+    }
+
+      #eAttack {
+        margin-top: 70%;
+        margin-bottom: 50%;
+        filter: hue-rotate(270deg);
+        transform: rotate(90deg);
+        width: 200px;
+        /* visibility: hidden; */
+      }
+
+      #pAttack {
+        width: 250px;
+        margin-top: 70%;
+        margin-bottom: 50%;
+        filter: hue-rotate(270deg);
+        /* visibility: hidden; */
+      }
+
+
+    #screen {
+      grid-area: encounter;
+      /* background-image: url(../Images/victoryFl.png); */
+      background-size: cover;
+    }
+
+
+
+    #eImage {
+      grid-area: eImage;
+      /* height: auto; */
+      width: 1fr;
+      /* background-color: purple; */
+      background-image: url();
+      background-size: cover;
+      background-position: right;
+      /* margin-top: 10%; */
+      /* margin-bottom: ; */
+      justify-content: flex-start;
+      /* right:100px; */
+      }
+    #newGameButton {
+        visibility: visible;
+        grid-area: newGame;
+        /* position:absolute; */
+        align-self: center;
+        width: auto;
+        color: navajowhite;
+        /* background-color: pink; */
+    }
+
+    #ambience {
+      grid-area: ambience;
+      margin-left: 10%;
+      margin-right:10%;
+    }
+
+    /* hp area grid */
+    .grid3 {
+      grid-area: hp;
+      /* display: grid; */
+      /* grid-template-columns: 1fr 5fr 1fr; */
+      /* grid-gap: 0.1fr; */
+      border: red dotted;
+      background-color: rgba(200, 164, 82,0.8);
+      position: relative;
+      justify-content: center;
+      align-items: center;
+    }
+
+      #lifeHeart {
+        /* grid-column: 2/3;
+        grid-row: 1/2; */
+        width: 100%;
+        position: absolute;
+        align-self: center;
+      }
+
+    .lifePoints {
+      /* grid-column: 2/3; */
+      /* justify-content: center;
+      position: absolute;
+      width: 100%;
+      align-self: center;
+      text-align: center;
+      color: navajowhite;
+      font-weight: bold;
+      font-size: 40px; */
+    }
+
+    /* events text display */
+    .events {
+      grid-column: 2/5;
+      grid-row: 3/5;
+      border: black dotted;
+      background-color: rgba(37, 51, 42, 0.8);
+      display: grid;
+      grid-template-rows: 1fr 1fr 1fr;
+      max-height: 300px;
+    }
+
+      .eventp {
+        text-align: center;
+        color: papayawhip;
+        font-size: 30px;
+        font-weight:bold;
+        width: 100%;
+      }
+
+    /* player options grid */
+    .grid4 {
+      grid-area: choice;
+      display: grid;
+      grid-template-rows: 1fr 0.2fr 1fr 0.2fr 1fr;
+      border: grey dotted;
+      background-color: rgba(200, 164, 82,0.8);
+    }
+
+      .buttons {
+        /* border-color:thick black; */
+        border-radius: 25px;
+        background-color: rgba(0, 0, 0, 0);
+        text-align: center;
+        color: rgb(122, 7, 7);
+        font-size: 30px;
+        font-weight:bold;
+        /* visibility: hidden; */
+      }
+
+      .fbuttons {
+        visibility: hidden;
+      }
+
+      #FiButton {
+        grid-row: 1/2;
+      }
+
+      #FrButton {
+        grid-row: 3/4;
+      }
+
+      #FlButton {
+        grid-row: 5/6;
+      }
+
+    .link {
+      grid-area: links;
+      font-size: 25px;
+    }
+
+    #backToGame {
+      position:absolute;
+      top:70%;
+      bottom:30%
+      text-align: center;
+      left: 45%;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* } */
