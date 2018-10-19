@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="CSS/main2.css">
+    <link rel="icon" href="Images/SpartanI.png">
+    <title>Trials of a Spartan</title>
+    <!-- put icon here -->
+  </head>
+  <body>
+
+    <div class ="grid1">
+      <header class ="gameTitle">
+        <h1 id="gameTitle"> Untitled </h1>
+      </header>
+      <section class ="grid2">
+
+        <div id="pImage"><img src="" id="eAttack"></div>
+        <figure class ="encounter" id="screen"></figure>
+        <div id="eImage"><img src="" id="pAttack"></div>
+
+        <button class ="buttons" id="newGameButton"> Start a new game!</button>
+
+        <audio loop id = "ambience" src = "" autoplay controls></audio>
+
+
+        <aside class ="hp grid3">
+          <img src="Images/heart.png" id="lifeHeart">
+          <!-- <p class="lifePoints">  </p> -->
+        </aside>
+
+        <summary class ="events">
+          <p class="eventp" id="p0"> ERROR</p>
+          <p class="eventp" id="p1"> ERROR</p>
+          <p class="eventp" id="p2"> ERROR</p>
+        </summary>
+
+        <aside class ="options grid4">
+          <button class="buttons fbuttons" id="FiButton"> Fight </button>
+          <button class="buttons fbuttons" id="FrButton"> Befriend </button>
+          <button class="buttons fbuttons" id="FlButton"> Flee </button>
+        </aside>
+
+        <a target="_blank" href="instructions.html" class="link">Instructions</a>
+      </section>
+    </div>
+    <audio loop = false id = "pActionSound" src = "" autoplay></audio>
+    <script src="javascript/js.js"></script>
+  </body>
+</html>
