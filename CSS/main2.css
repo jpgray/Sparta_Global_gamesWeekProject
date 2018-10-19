@@ -131,7 +131,7 @@ body {
       /* display: grid; */
       /* grid-template-columns: 1fr 5fr 1fr; */
       /* grid-gap: 0.1fr; */
-      border: red dotted;
+      /* border: red dotted; */
       background-color: rgba(200, 164, 82,0.8);
       position: relative;
       justify-content: center;
@@ -162,7 +162,7 @@ body {
     .events {
       grid-column: 2/5;
       grid-row: 3/5;
-      border: black dotted;
+      /* border: black dotted; */
       background-color: rgba(37, 51, 42, 0.8);
       display: grid;
       grid-template-rows: 1fr 1fr 1fr;
@@ -182,7 +182,7 @@ body {
       grid-area: choice;
       display: grid;
       grid-template-rows: 1fr 0.2fr 1fr 0.2fr 1fr;
-      border: grey dotted;
+      /* border: grey dotted; */
       background-color: rgba(200, 164, 82,0.8);
     }
 
