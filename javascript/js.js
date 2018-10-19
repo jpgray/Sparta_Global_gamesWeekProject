@@ -56,9 +56,10 @@ const Slime = new monster("Slime", 1, 1, 1, 30, 20, 3, 10, "url('Images/Slime.pn
 const SlimeR = new monster("", 0, 0, 0, 30, 20, 3, 0, "");
 console.log(Slime);
 
-const Rock = new monster("Rock", 0, 1000, 0, 200, 1000, 0, 1000000000, "url('Images/rock.png')");
+const Rock = new monster("Rock", 0, 1000, 0, 200, 1000, 0, 1, "url('Images/rock.png')");
 const RockR = new monster("", 0, 0, 0, 200, 1000, 0, 0, "");
 Rock.fightMessage = "The Rock remains unstirred"
+Rock.friendMessage = "The Rock remains unstirred"
 console.log(Rock);
 
 const furiousRockShards = new monster("Furious Rock Shards", 22, 1000, 0, 120, 65, 30, 0, "url('Images/angryRockShards.png')");
@@ -152,7 +153,7 @@ let setEncounter = () => {
     currentEncounter = BBEG;
     updateEvents(`The ${currentEncounter.name} has shown itself!`,2*tUnit);
     setEncImage(2*tUnit);
-    newMusic("Music/battle.mp3",2*tUnit,0.1)
+    // newMusic("Music/battle.mp3",2*tUnit,0.1)
     return BBEG;}
 
   else if (totalVictories() == 21) {
@@ -271,7 +272,7 @@ const setEncImage = (timeout) => {setTimeout(changeEImage,timeout)
 
 fight = () => {
   hideAllF();
-  playActionSound("Music/fight.wav",0,0.5);
+  playActionSound("Music/fight.wav",0,0.05);
   setTimeout(() => {document.getElementById('ambience').volume = 1},500)
   // FIwin = 0;0
   playerFight = player.strength * ((Math.random())/2 +0.5);
@@ -634,6 +635,8 @@ const playActionSound = (address,timeout,loudness) => setTimeout(() => {actionSo
 
 
 
+// reset kills = 0 in set function
+// reset boss strength to 25
 
 
 

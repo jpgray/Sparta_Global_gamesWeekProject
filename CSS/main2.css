@@ -216,6 +216,11 @@ body {
     .link {
       grid-area: links;
       font-size: 25px;
+      color: navajowhite;
+      /* border: 1px navajowhite solid; */
+      text-align:center;
+      margin-top: 12px;
+      /* border-radius: 25px; */
     }
 
     #backToGame {
