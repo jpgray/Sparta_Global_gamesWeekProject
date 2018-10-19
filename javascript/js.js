@@ -56,7 +56,7 @@ const Slime = new monster("Slime", 1, 1, 1, 30, 20, 3, 10, "url('Images/Slime.pn
 const SlimeR = new monster("", 0, 0, 0, 30, 20, 3, 0, "");
 console.log(Slime);
 
-const Rock = new monster("Rock", 0, 1000, 0, 200, 1000, 0, 0, "url('Images/rock.png')");
+const Rock = new monster("Rock", 0, 1000, 0, 200, 1000, 0, 1000000000, "url('Images/rock.png')");
 const RockR = new monster("", 0, 0, 0, 200, 1000, 0, 0, "");
 Rock.fightMessage = "The Rock remains unstirred"
 console.log(Rock);
@@ -93,7 +93,7 @@ const BBEGR = new monster("", 0, 0, 0, 100, 100, 100, 0, "");
 console.log(BBEG);
 
 const accumulator = (a, b) => a + b;
-const totalProb = probArray.reduce(accumulator,0);
+let totalProb;
 
 let kills = 0;
 let escapes = 0;
@@ -146,6 +146,7 @@ updateProbAcc();
 
 let currentEncounter;
 let setEncounter = () => {
+  updateProbAcc();
   console.log(totalVictories())
   if (totalVictories() == 20) {
     currentEncounter = BBEG;
@@ -177,6 +178,7 @@ let setEncounter = () => {
 
   else{
     //random encouter
+    totalProb = probArray.reduce(accumulator,0);
     let ranVal = Math.random() * totalProb;
     console.log(`${ranVal} out of ${totalProb} was rolled!`);
     for (var i = 1; i < probAccArray.length; i++) {
@@ -425,23 +427,21 @@ const instanceFiVictoryCheck = hp => {
       updateEvents(TastyBanana.fiWinMessage,tUnit);
     }
 
-    if (currentEncounter.name == "Rock"){
-      Rock.encounterChance = 0;
-    }
+
     else{
     updateEvents(`Congratulations! You killed the enemy ${currentEncounter.name}! `,tUnit);
-    player.strength += 0.5 * currentEncounter.strength;}
-    kills++;
-    if (currentEncounter.name == "Rock"){
-      Rock.encounterChance = 0;
-      furiousRockShards.encounterChance = 10;
-      updateProbAcc();
+    player.strength += 0.5 * currentEncounter.strength;
+      if (currentEncounter.name == "Rock"){
+        Rock.encounterChance = 0;
+        furiousRockShards.encounterChance = 10;
+        updateProbAcc();
       }
-    else if (currentEncounter.name == "Furious Rock Shards") {
-      Eock.encounterChance = 2;
-      furiousRockShards.encounterChance = 0;
-      updateProbAcc();
-    }
+      else if (currentEncounter.name == "Furious Rock Shards") {
+        Rock.encounterChance = 2;
+        furiousRockShards.encounterChance = 0;
+        updateProbAcc();
+    }}
+    kills++;
     currentEncounter.health = encounterArray[currentEncounter.arrIndex+1].health;
     currentEncounter.resilience = encounterArray[currentEncounter.arrIndex+1].resilience;
     currentEncounter.endurance = encounterArray[currentEncounter.arrIndex+1].endurance;
@@ -522,6 +522,7 @@ const hideAllF = () => {
   hideButton(fButtons[1]);
   hideButton(fButtons[2]);
 }
+
 const unhideButton = (BUTTON) => BUTTON.style.visibility="visible";
 const unhideNewGameButton = () => unhideButton(document.getElementById('newGameButton'))
 const unhideAllF = () => {
@@ -529,6 +530,7 @@ const unhideAllF = () => {
   unhideButton(fButtons[1]);
   unhideButton(fButtons[2]);
 }
+
 const unhideAllTimer = (timeout) => setTimeout(unhideAllF,timeout)
 
 
